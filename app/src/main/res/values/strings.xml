@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GitHubRebel</string>
+    <string name="app_name">GitHubClient</string>
     <string name="search" translatable="false">Search</string>
     <string name="search_hint" translatable="false">Press on the magnifier to search for repositories</string>
     <string name="search_error" translatable="false">Oops, an error occurred.</string>

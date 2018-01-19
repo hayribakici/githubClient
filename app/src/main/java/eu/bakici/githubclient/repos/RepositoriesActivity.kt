@@ -1,5 +1,6 @@
 package eu.bakici.githubclient.repos
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +13,7 @@ import android.support.v7.widget.SearchView
 import android.text.TextUtils
 import android.view.Menu
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import eu.bakici.githubclient.GitHubApplication
 import eu.bakici.githubclient.R
 import eu.bakici.githubclient.dagger.ApplicationComponent
@@ -39,9 +41,26 @@ open class RepositoriesActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    closeKeyboard()
+                }
+            }
+        })
         setupEmptyView(recyclerView)
         viewModel.inject(getApplicationComponent())
     }
+
+    fun closeKeyboard() {
+        // Check if no view has focus:
+        val view = currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0);
+        }
+    }
+
 
     private fun setupEmptyView(recyclerView: RecyclerView) {
         val emptyView = binding.emptyView
